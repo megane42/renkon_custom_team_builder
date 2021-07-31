@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_205155) do
+ActiveRecord::Schema.define(version: 2021_07_31_212131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(version: 2021_07_31_205155) do
     t.index ["instant_entry_id", "role_definition_id"], name: "index_instant_role_requests_on_entry_id_and_role_id", unique: true
     t.index ["instant_entry_id"], name: "index_instant_role_requests_on_instant_entry_id"
     t.index ["role_definition_id"], name: "index_instant_role_requests_on_role_definition_id"
+  end
+
+  create_table "instant_sheet_assignments", force: :cascade do |t|
+    t.bigint "instant_entry_id", null: false
+    t.bigint "sheet_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["instant_entry_id"], name: "index_instant_sheet_assignments_on_instant_entry_id"
+    t.index ["sheet_id"], name: "index_instant_sheet_assignments_on_sheet_id", unique: true
   end
 
   create_table "role_definitions", force: :cascade do |t|
@@ -98,6 +107,8 @@ ActiveRecord::Schema.define(version: 2021_07_31_205155) do
   add_foreign_key "instant_entries", "events"
   add_foreign_key "instant_role_requests", "instant_entries"
   add_foreign_key "instant_role_requests", "role_definitions"
+  add_foreign_key "instant_sheet_assignments", "instant_entries"
+  add_foreign_key "instant_sheet_assignments", "sheets"
   add_foreign_key "sheet_definitions", "role_definitions"
   add_foreign_key "sheets", "sheet_definitions"
   add_foreign_key "sheets", "teams"
