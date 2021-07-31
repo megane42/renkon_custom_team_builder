@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_191756) do
+ActiveRecord::Schema.define(version: 2021_07_31_192159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 2021_07_31_191756) do
     t.index ["name"], name: "index_role_definitions_on_name", unique: true
   end
 
+  create_table "sheet_definitions", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "role_definition_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "role_definition_id"], name: "index_sheet_definitions_on_name_and_role_definition_id", unique: true
+    t.index ["name"], name: "index_sheet_definitions_on_name", unique: true
+    t.index ["role_definition_id"], name: "index_sheet_definitions_on_role_definition_id"
+  end
+
   create_table "team_definitions", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -56,6 +66,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_191756) do
   end
 
   add_foreign_key "games", "events"
+  add_foreign_key "sheet_definitions", "role_definitions"
   add_foreign_key "teams", "games"
   add_foreign_key "teams", "team_definitions"
 end
