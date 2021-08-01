@@ -4,4 +4,6 @@ class InstantGameEntry < ApplicationRecord
 
   has_many :instant_sheet_assignments, dependent: :destroy
   has_many :sheet, through: :instant_sheet_assignments
+
+  delegate :can_play?, to: :instant_entry
 end
