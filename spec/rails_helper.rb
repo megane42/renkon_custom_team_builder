@@ -61,4 +61,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Abbrev FactoryBot notations
+  config.include FactoryBot::Syntax::Methods
 end
+
+# Load seed data on test env
+Rails.application.load_seed
