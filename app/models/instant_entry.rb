@@ -6,4 +6,8 @@ class InstantEntry < ApplicationRecord
 
   has_many :instant_game_entries, dependent: :destroy
   has_many :games, through: :instant_game_entries
+
+  def can_play?(role_definition)
+    requested_roles.include?(role_definition)
+  end
 end
