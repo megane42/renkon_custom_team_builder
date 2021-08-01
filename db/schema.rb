@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_212131) do
+ActiveRecord::Schema.define(version: 2021_08_01_101551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 2021_07_31_212131) do
     t.index ["name"], name: "index_instant_entries_on_name"
   end
 
+  create_table "instant_game_entries", force: :cascade do |t|
+    t.bigint "instant_entry_id", null: false
+    t.bigint "game_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_instant_game_entries_on_game_id"
+    t.index ["instant_entry_id", "game_id"], name: "index_instant_game_entries_on_instant_entry_id_and_game_id", unique: true
+    t.index ["instant_entry_id"], name: "index_instant_game_entries_on_instant_entry_id"
+  end
+
   create_table "instant_role_requests", force: :cascade do |t|
     t.bigint "instant_entry_id", null: false
     t.bigint "role_definition_id", null: false
@@ -51,11 +61,11 @@ ActiveRecord::Schema.define(version: 2021_07_31_212131) do
   end
 
   create_table "instant_sheet_assignments", force: :cascade do |t|
-    t.bigint "instant_entry_id", null: false
+    t.bigint "instant_game_entry_id", null: false
     t.bigint "sheet_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["instant_entry_id"], name: "index_instant_sheet_assignments_on_instant_entry_id"
+    t.index ["instant_game_entry_id"], name: "index_instant_sheet_assignments_on_instant_game_entry_id", unique: true
     t.index ["sheet_id"], name: "index_instant_sheet_assignments_on_sheet_id", unique: true
   end
 
@@ -105,9 +115,11 @@ ActiveRecord::Schema.define(version: 2021_07_31_212131) do
 
   add_foreign_key "games", "events"
   add_foreign_key "instant_entries", "events"
+  add_foreign_key "instant_game_entries", "games"
+  add_foreign_key "instant_game_entries", "instant_entries"
   add_foreign_key "instant_role_requests", "instant_entries"
   add_foreign_key "instant_role_requests", "role_definitions"
-  add_foreign_key "instant_sheet_assignments", "instant_entries"
+  add_foreign_key "instant_sheet_assignments", "instant_game_entries"
   add_foreign_key "instant_sheet_assignments", "sheets"
   add_foreign_key "sheet_definitions", "role_definitions"
   add_foreign_key "sheets", "sheet_definitions"

@@ -4,6 +4,6 @@ class InstantEntry < ApplicationRecord
   has_many :instant_role_requests, dependent: :destroy
   has_many :requested_roles, through: :instant_role_requests, source: :role_definition
 
-  has_many :instant_sheet_assignments, dependent: :destroy
-  has_many :sheet, through: :instant_sheet_assignments
+  has_many :instant_game_entries, dependent: :destroy
+  has_many :games, through: :instant_game_entries
 end
