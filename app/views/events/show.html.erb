@@ -1,0 +1,15 @@
+<h1>Events Show</h1>
+
+<nav style="margin-bottom: 16px">
+  <%= link_to "index", events_path %>
+  <%= link_to "edit", edit_event_path(@event) %>
+</nav>
+
+<div style="margin-bottom: 16px">
+  <%= flash[:notice] %>
+</div>
+
+<div style="margin-bottom: 16px">
+  <div>name: <%= @event.name %></div>
+  <div>start_at: <%= @event.start_at %></div>
+</div>

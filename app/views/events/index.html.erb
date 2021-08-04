@@ -1,0 +1,13 @@
+<h1>Events Index</h1>
+
+<nav style="margin-bottom: 16px">
+  <%= link_to "new", new_event_path %>
+</nav>
+
+<ul>
+  <% @events.each do |event| %>
+    <li>
+      <%= link_to event.name, event_path(event) %>
+    </li>
+  <% end %>
+</ul>

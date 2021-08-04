@@ -1,0 +1,21 @@
+<h1>Events New</h1>
+
+<nav style="margin-bottom: 16px">
+  <%= link_to "index", events_path %>
+</nav>
+
+<div style="margin-bottom: 16px">
+  <%= @event.errors.full_messages.join(" / ") %>
+</div>
+
+<%= form_with model: @event do |form| %>
+  <div style="margin-bottom: 16px">
+    <%= form.label      :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div style="margin-bottom: 16px">
+    <%= form.label           :start_at %>
+    <%= form.datetime_select :start_at %>
+  </div>
+  <%= form.submit %>
+<% end %>
