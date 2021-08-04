@@ -6,5 +6,6 @@ class CreateInstantEntries < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :instant_entries, [:name, :event_id], unique: true
   end
 end

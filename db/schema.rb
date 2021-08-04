@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2021_08_01_101551) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["event_id"], name: "index_instant_entries_on_event_id"
+    t.index ["name", "event_id"], name: "index_instant_entries_on_name_and_event_id", unique: true
     t.index ["name"], name: "index_instant_entries_on_name"
   end
 
