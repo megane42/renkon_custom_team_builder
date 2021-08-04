@@ -1,0 +1,18 @@
+ja:
+  date:
+    order:
+    - :year
+    - :month
+    - :day
+  errors:
+    format: "%{attribute}%{message}"
+  activemodel:
+    attributes:
+      instant_entry_form:
+        name: "名前"
+    errors:
+      models:
+        instant_entry_form:
+          taken: "が他の人と重複しています"
+          blank: "が空です"
+          invalid_role_request: "最低 1 つ以上のロールを指定してください"

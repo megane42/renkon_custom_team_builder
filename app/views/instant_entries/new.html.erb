@@ -1,0 +1,25 @@
+<h1>Instant Entries New</h1>
+
+<div style="margin-bottom: 16px">
+  <%= @instant_entry_form.errors.full_messages.join(" / ") %>
+</div>
+
+<%= form_with model: [@event, @instant_entry_form] do |form| %>
+  <div style="margin-bottom: 16px">
+    <%= form.label      :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div style="margin-bottom: 16px">
+    <%= form.label     :can_tank %>
+    <%= form.check_box :can_tank %>
+  </div>
+  <div style="margin-bottom: 16px">
+    <%= form.label     :can_damage %>
+    <%= form.check_box :can_damage %>
+  </div>
+  <div style="margin-bottom: 16px">
+    <%= form.label     :can_support %>
+    <%= form.check_box :can_support %>
+  </div>
+  <%= form.submit %>
+<% end %>
