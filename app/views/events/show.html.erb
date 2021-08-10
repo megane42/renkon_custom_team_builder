@@ -4,6 +4,10 @@
   <%= link_to "index", events_path %>
   <%= link_to "edit", edit_event_path(@event) %>
   <%= link_to "entry", new_event_instant_entry_path(@event) %>
+  <%= link_to "games", event_games_path(@event) %>
+  <%= form_with(url: event_games_path(@event)) do |form| %>
+    <%= form.submit %>
+  <% end %>
 </nav>
 
 <div style="margin-bottom: 16px">

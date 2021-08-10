@@ -1,0 +1,13 @@
+<h1>Games Index</h1>
+
+<nav style="margin-bottom: 16px">
+  <%= link_to "event", event_path(@event) %>
+</nav>
+
+<ul>
+  <% @games.each.with_index(1) do |game, i| %>
+    <li>
+      <%= link_to "第 #{i} 試合", event_game_path(@event, game) %>
+    </li>
+  <% end %>
+</ul>
