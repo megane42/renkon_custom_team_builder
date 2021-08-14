@@ -15,16 +15,16 @@ RSpec.describe "Games", type: :request do
 
   describe "POST /events/:event_id/games" do
     context "valid case" do
-      it "creates a game, teams, and sheets" do
+      it "creates a game, teams, and seats" do
         expect(Game.count).to eq 0
         expect(Team.count).to eq 0
-        expect(Sheet.count).to eq 0
+        expect(Seat.count).to eq 0
 
         post event_games_path(event)
 
         expect(Game.count).to eq 1
         expect(Team.count).to eq 2
-        expect(Sheet.count).to eq 12
+        expect(Seat.count).to eq 12
       end
 
       it "redirect to created game page" do
@@ -41,16 +41,16 @@ RSpec.describe "Games", type: :request do
         allow(GameForm).to receive(:new).and_return(game_form_double)
       end
 
-      it "does not create a game, teams, and sheets" do
+      it "does not create a game, teams, and seats" do
         expect(Game.count).to eq 0
         expect(Team.count).to eq 0
-        expect(Sheet.count).to eq 0
+        expect(Seat.count).to eq 0
 
         post event_games_path(event)
 
         expect(Game.count).to eq 0
         expect(Team.count).to eq 0
-        expect(Sheet.count).to eq 0
+        expect(Seat.count).to eq 0
       end
 
       it "shows event show page again" do

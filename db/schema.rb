@@ -61,13 +61,13 @@ ActiveRecord::Schema.define(version: 2021_08_01_101551) do
     t.index ["role_definition_id"], name: "index_instant_role_requests_on_role_definition_id"
   end
 
-  create_table "instant_sheet_assignments", force: :cascade do |t|
+  create_table "instant_seat_assignments", force: :cascade do |t|
     t.bigint "instant_game_entry_id", null: false
-    t.bigint "sheet_id", null: false
+    t.bigint "seat_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["instant_game_entry_id"], name: "index_instant_sheet_assignments_on_instant_game_entry_id", unique: true
-    t.index ["sheet_id"], name: "index_instant_sheet_assignments_on_sheet_id", unique: true
+    t.index ["instant_game_entry_id"], name: "index_instant_seat_assignments_on_instant_game_entry_id", unique: true
+    t.index ["seat_id"], name: "index_instant_seat_assignments_on_seat_id", unique: true
   end
 
   create_table "role_definitions", force: :cascade do |t|
@@ -77,24 +77,24 @@ ActiveRecord::Schema.define(version: 2021_08_01_101551) do
     t.index ["name"], name: "index_role_definitions_on_name", unique: true
   end
 
-  create_table "sheet_definitions", force: :cascade do |t|
+  create_table "seat_definitions", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "role_definition_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["name", "role_definition_id"], name: "index_sheet_definitions_on_name_and_role_definition_id", unique: true
-    t.index ["name"], name: "index_sheet_definitions_on_name", unique: true
-    t.index ["role_definition_id"], name: "index_sheet_definitions_on_role_definition_id"
+    t.index ["name", "role_definition_id"], name: "index_seat_definitions_on_name_and_role_definition_id", unique: true
+    t.index ["name"], name: "index_seat_definitions_on_name", unique: true
+    t.index ["role_definition_id"], name: "index_seat_definitions_on_role_definition_id"
   end
 
-  create_table "sheets", force: :cascade do |t|
+  create_table "seats", force: :cascade do |t|
     t.bigint "team_id", null: false
-    t.bigint "sheet_definition_id", null: false
+    t.bigint "seat_definition_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["sheet_definition_id"], name: "index_sheets_on_sheet_definition_id"
-    t.index ["team_id", "sheet_definition_id"], name: "index_sheets_on_team_id_and_sheet_definition_id", unique: true
-    t.index ["team_id"], name: "index_sheets_on_team_id"
+    t.index ["seat_definition_id"], name: "index_seats_on_seat_definition_id"
+    t.index ["team_id", "seat_definition_id"], name: "index_seats_on_team_id_and_seat_definition_id", unique: true
+    t.index ["team_id"], name: "index_seats_on_team_id"
   end
 
   create_table "team_definitions", force: :cascade do |t|
@@ -120,11 +120,11 @@ ActiveRecord::Schema.define(version: 2021_08_01_101551) do
   add_foreign_key "instant_game_entries", "instant_entries"
   add_foreign_key "instant_role_requests", "instant_entries"
   add_foreign_key "instant_role_requests", "role_definitions"
-  add_foreign_key "instant_sheet_assignments", "instant_game_entries"
-  add_foreign_key "instant_sheet_assignments", "sheets"
-  add_foreign_key "sheet_definitions", "role_definitions"
-  add_foreign_key "sheets", "sheet_definitions"
-  add_foreign_key "sheets", "teams"
+  add_foreign_key "instant_seat_assignments", "instant_game_entries"
+  add_foreign_key "instant_seat_assignments", "seats"
+  add_foreign_key "seat_definitions", "role_definitions"
+  add_foreign_key "seats", "seat_definitions"
+  add_foreign_key "seats", "teams"
   add_foreign_key "teams", "games"
   add_foreign_key "teams", "team_definitions"
 end

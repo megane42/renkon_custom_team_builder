@@ -15,20 +15,20 @@ class GameForm
     end
 
     team_a = game.teams.build(team_definition: TeamDefinition.a_team)
-    team_a.sheets.build(sheet_definition: SheetDefinition.tank_a_sheet)
-    team_a.sheets.build(sheet_definition: SheetDefinition.tank_b_sheet)
-    team_a.sheets.build(sheet_definition: SheetDefinition.damage_a_sheet)
-    team_a.sheets.build(sheet_definition: SheetDefinition.damage_b_sheet)
-    team_a.sheets.build(sheet_definition: SheetDefinition.support_a_sheet)
-    team_a.sheets.build(sheet_definition: SheetDefinition.support_b_sheet)
+    team_a.seats.build(seat_definition: SeatDefinition.tank_a_seat)
+    team_a.seats.build(seat_definition: SeatDefinition.tank_b_seat)
+    team_a.seats.build(seat_definition: SeatDefinition.damage_a_seat)
+    team_a.seats.build(seat_definition: SeatDefinition.damage_b_seat)
+    team_a.seats.build(seat_definition: SeatDefinition.support_a_seat)
+    team_a.seats.build(seat_definition: SeatDefinition.support_b_seat)
 
     team_b = game.teams.build(team_definition: TeamDefinition.b_team)
-    team_b.sheets.build(sheet_definition: SheetDefinition.tank_a_sheet)
-    team_b.sheets.build(sheet_definition: SheetDefinition.tank_b_sheet)
-    team_b.sheets.build(sheet_definition: SheetDefinition.damage_a_sheet)
-    team_b.sheets.build(sheet_definition: SheetDefinition.damage_b_sheet)
-    team_b.sheets.build(sheet_definition: SheetDefinition.support_a_sheet)
-    team_b.sheets.build(sheet_definition: SheetDefinition.support_b_sheet)
+    team_b.seats.build(seat_definition: SeatDefinition.tank_a_seat)
+    team_b.seats.build(seat_definition: SeatDefinition.tank_b_seat)
+    team_b.seats.build(seat_definition: SeatDefinition.damage_a_seat)
+    team_b.seats.build(seat_definition: SeatDefinition.damage_b_seat)
+    team_b.seats.build(seat_definition: SeatDefinition.support_a_seat)
+    team_b.seats.build(seat_definition: SeatDefinition.support_b_seat)
 
     game.save
   end
