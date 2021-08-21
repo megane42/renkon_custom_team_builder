@@ -2,8 +2,8 @@ class Seat < ApplicationRecord
   belongs_to :team
   belongs_to :seat_definition
 
-  has_many :instant_seat_assignments, dependent: :destroy
-  has_many :instant_game_entries, through: :instant_seat_assignments
+  has_one :instant_seat_assignment, dependent: :destroy
+  has_one :instant_game_entry, through: :instant_seat_assignment
 
   delegate :role_definition, to: :seat_definition
 end

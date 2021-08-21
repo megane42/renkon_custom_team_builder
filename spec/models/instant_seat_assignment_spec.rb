@@ -11,13 +11,13 @@ RSpec.describe InstantSeatAssignment, type: :model do
     let!(:instant_entries) { create_list(:instant_entry, 2, event: event, games: [game], requested_roles: [tank_role]) }
 
     it "can not assign 1 entry to 2 seats" do
-      expect(game.instant_game_entries[0].instant_seat_assignments.create!(seat: seat_tank_a)).to be_a described_class
-      expect{game.instant_game_entries[0].instant_seat_assignments.create!(seat: seat_tank_b)}.to raise_error ActiveRecord::RecordNotUnique
+      expect(game.instant_game_entries[0].create_instant_seat_assignment!(seat: seat_tank_a)).to be_a described_class
+      expect{game.instant_game_entries[0].create_instant_seat_assignment!(seat: seat_tank_b)}.to raise_error ActiveRecord::RecordNotUnique
     end
 
     it "can not assign 2 entries to 1 seat" do
-      expect(game.instant_game_entries[0].instant_seat_assignments.create!(seat: seat_tank_a)).to be_a described_class
-      expect{game.instant_game_entries[1].instant_seat_assignments.create!(seat: seat_tank_a)}.to raise_error ActiveRecord::RecordNotUnique
+      expect(game.instant_game_entries[0].create_instant_seat_assignment!(seat: seat_tank_a)).to be_a described_class
+      expect{game.instant_game_entries[1].create_instant_seat_assignment!(seat: seat_tank_a)}.to raise_error ActiveRecord::RecordNotUnique
     end
   end
 
