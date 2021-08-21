@@ -7,4 +7,8 @@ class InstantGameEntry < ApplicationRecord
 
   delegate :can_play?, to: :instant_entry
   delegate :name,      to: :instant_entry
+
+  def destroy_seat_assignment
+    instant_seat_assignment&.destroy
+  end
 end

@@ -3,45 +3,34 @@ class InstantSeatAssignmentForm
   include ActiveModel::Attributes
 
   attribute :game
+  attribute :must_pick_ids
 
   def shuffle
-    temporary_instant_game_entries = game.instant_game_entries.to_a
+    loop do
+      game.destroy_seat_assignments
 
-    ActiveRecord::Base.transaction do
-      sorted_role_popularity.keys.each do |role|
-        fixed_instant_game_entries = filter_by_role(temporary_instant_game_entries, role).sample(4)
+      temporary_instant_game_entries = game.instant_game_entries.to_a
 
-        fixed_instant_game_entries[0].seat = team_a.seats.for_role(role)[0]
-        fixed_instant_game_entries[1].seat = team_a.seats.for_role(role)[1]
-        fixed_instant_game_entries[2].seat = team_b.seats.for_role(role)[0]
-        fixed_instant_game_entries[3].seat = team_b.seats.for_role(role)[1]
-        fixed_instant_game_entries.each(&:save)
+      ActiveRecord::Base.transaction do
+        sorted_role_popularity.keys.each do |role|
+          fixed_instant_game_entries = filter_by_role(temporary_instant_game_entries, role).sample(4)
 
-        temporary_instant_game_entries -= fixed_instant_game_entries
+          fixed_instant_game_entries[0].seat = team_a.seats.for_role(role)[0]
+          fixed_instant_game_entries[1].seat = team_a.seats.for_role(role)[1]
+          fixed_instant_game_entries[2].seat = team_b.seats.for_role(role)[0]
+          fixed_instant_game_entries[3].seat = team_b.seats.for_role(role)[1]
+          fixed_instant_game_entries.each(&:save)
+
+          temporary_instant_game_entries -= fixed_instant_game_entries
+        end
       end
+
+      log_result
+
+      break if satisfy_must_pick
+
+      Rails.logger.info("constraint is not satisfied, try again...")
     end
-
-    puts <<~EOS
-      ============================================
-      team a
-
-      player: #{team_a.seats[0].instant_game_entry.name} -> #{team_a.seats[0].seat_definition.name}
-      player: #{team_a.seats[1].instant_game_entry.name} -> #{team_a.seats[1].seat_definition.name}
-      player: #{team_a.seats[2].instant_game_entry.name} -> #{team_a.seats[2].seat_definition.name}
-      player: #{team_a.seats[3].instant_game_entry.name} -> #{team_a.seats[3].seat_definition.name}
-      player: #{team_a.seats[4].instant_game_entry.name} -> #{team_a.seats[4].seat_definition.name}
-      player: #{team_a.seats[5].instant_game_entry.name} -> #{team_a.seats[5].seat_definition.name}
-
-      ============================================
-      team b
-
-      player: #{team_b.seats[0].instant_game_entry.name} -> #{team_b.seats[0].seat_definition.name}
-      player: #{team_b.seats[1].instant_game_entry.name} -> #{team_b.seats[1].seat_definition.name}
-      player: #{team_b.seats[2].instant_game_entry.name} -> #{team_b.seats[2].seat_definition.name}
-      player: #{team_b.seats[3].instant_game_entry.name} -> #{team_b.seats[3].seat_definition.name}
-      player: #{team_b.seats[4].instant_game_entry.name} -> #{team_b.seats[4].seat_definition.name}
-      player: #{team_b.seats[5].instant_game_entry.name} -> #{team_b.seats[5].seat_definition.name}
-    EOS
   end
 
   private
@@ -79,5 +68,39 @@ class InstantSeatAssignmentForm
     instant_game_entries.select do |instant_game_entry|
       instant_game_entry.can_play?(role)
     end
+  end
+
+  def satisfy_must_pick
+    return true if must_pick_ids.blank?
+
+    game.instant_game_entries.where(id: must_pick_ids).all? do |instant_game_entry|
+      instant_game_entry.seat.present?
+    end
+  end
+
+  def log_result
+    game.reload
+
+    Rails.logger.info <<~EOS
+      ============================================
+      team a
+
+      player: #{game.teams[0].seats[0].instant_game_entry.name} -> #{game.teams[0].seats[0].seat_definition.name}
+      player: #{game.teams[0].seats[1].instant_game_entry.name} -> #{game.teams[0].seats[1].seat_definition.name}
+      player: #{game.teams[0].seats[2].instant_game_entry.name} -> #{game.teams[0].seats[2].seat_definition.name}
+      player: #{game.teams[0].seats[3].instant_game_entry.name} -> #{game.teams[0].seats[3].seat_definition.name}
+      player: #{game.teams[0].seats[4].instant_game_entry.name} -> #{game.teams[0].seats[4].seat_definition.name}
+      player: #{game.teams[0].seats[5].instant_game_entry.name} -> #{game.teams[0].seats[5].seat_definition.name}
+
+      ============================================
+      team b
+
+      player: #{game.teams[1].seats[0].instant_game_entry.name} -> #{game.teams[1].seats[0].seat_definition.name}
+      player: #{game.teams[1].seats[1].instant_game_entry.name} -> #{game.teams[1].seats[1].seat_definition.name}
+      player: #{game.teams[1].seats[2].instant_game_entry.name} -> #{game.teams[1].seats[2].seat_definition.name}
+      player: #{game.teams[1].seats[3].instant_game_entry.name} -> #{game.teams[1].seats[3].seat_definition.name}
+      player: #{game.teams[1].seats[4].instant_game_entry.name} -> #{game.teams[1].seats[4].seat_definition.name}
+      player: #{game.teams[1].seats[5].instant_game_entry.name} -> #{game.teams[1].seats[5].seat_definition.name}
+    EOS
   end
 end
