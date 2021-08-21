@@ -6,4 +6,5 @@ class InstantGameEntry < ApplicationRecord
   has_one :seat, through: :instant_seat_assignment
 
   delegate :can_play?, to: :instant_entry
+  delegate :name,      to: :instant_entry
 end
