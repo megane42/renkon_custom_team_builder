@@ -19,3 +19,28 @@ SeatDefinition.find_or_create_by(name: "damage_a",  role_definition: role_defini
 SeatDefinition.find_or_create_by(name: "damage_b",  role_definition: role_definition_damage)
 SeatDefinition.find_or_create_by(name: "support_a", role_definition: role_definition_support)
 SeatDefinition.find_or_create_by(name: "support_b", role_definition: role_definition_support)
+
+if Rails.env.development?
+  event = Event.find_or_create_by(name: "event_1", start_at: "2021-01-01 00:00:00")
+
+  unless event.instant_entries.present?
+    15.times do |i|
+      instant_entry = event.instant_entries.create(name: "player_#{i}")
+      case i
+      when 0..4
+        instant_entry.requested_roles << RoleDefinition.tank_role
+        instant_entry.requested_roles << RoleDefinition.damage_role
+        instant_entry.requested_roles << RoleDefinition.support_role
+      when 5..9
+        instant_entry.requested_roles << RoleDefinition.damage_role
+        instant_entry.requested_roles << RoleDefinition.support_role
+      when 10..14
+        instant_entry.requested_roles << RoleDefinition.support_role
+      end
+    end
+  end
+
+  unless event.games.present?
+    GameForm.new(event: event).save
+  end
+end
