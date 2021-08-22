@@ -5,8 +5,10 @@ class InstantSeatAssignmentForm
   attribute :game
   attribute :must_pick_ids
 
+  SHUFFLE_ATTEMPT_LIMIT = 30
+
   def shuffle
-    loop do
+    SHUFFLE_ATTEMPT_LIMIT.times do
       game.destroy_seat_assignments
 
       temporary_instant_game_entries = game.instant_game_entries.to_a
@@ -27,10 +29,14 @@ class InstantSeatAssignmentForm
 
       log_result
 
-      break if satisfy_must_pick
+      return true if satisfy_must_pick
 
       Rails.logger.info("constraint is not satisfied, try again...")
     end
+
+    Rails.logger.info("contraint is too strong and never satisfied.")
+    game.destroy_seat_assignments
+    false
   end
 
   private
