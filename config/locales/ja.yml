@@ -16,3 +16,6 @@ ja:
           taken: "が他の人と重複しています"
           blank: "が空です"
           invalid_role_request: "最低 1 つ以上のロールを指定してください"
+        instant_seat_assignment_form:
+          role_request_shortage: "ロールの希望が足りないためチームを構築できません"
+          constraint_too_strong: "条件に合うチームがなかなか見つかりませんでした"

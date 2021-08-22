@@ -5,11 +5,15 @@ class InstantSeatAssignmentForm
   attribute :game
   attribute :must_pick_ids
 
+  validate :enough_role_requests
+
   SHUFFLE_ATTEMPT_LIMIT = 30
 
   def shuffle
+    return false unless valid?
+
     SHUFFLE_ATTEMPT_LIMIT.times do
-      game.destroy_seat_assignments
+      game.destroy_seat_assignments!
 
       temporary_instant_game_entries = game.instant_game_entries.to_a
 
@@ -30,7 +34,8 @@ class InstantSeatAssignmentForm
       return true if satisfy_must_pick
     end
 
-    game.destroy_seat_assignments
+    game.destroy_seat_assignments!
+    errors.add(:base, :constraint_too_strong)
     false
   end
 
@@ -56,8 +61,16 @@ class InstantSeatAssignmentForm
     @team_b ||= game.teams[1]
   end
 
+  def enough_role_requests
+    if sorted_role_popularity[tank_role].to_i    < 4 ||
+       sorted_role_popularity[damage_role].to_i  < 4 ||
+       sorted_role_popularity[support_role].to_i < 4
+      errors.add(:base, :role_request_shortage)
+    end
+  end
+
   def sorted_role_popularity
-    game.instant_entries.reduce(Hash.new(0)) do |result, instant_entry|
+    @sorted_role_popularity = game.instant_entries.reduce(Hash.new(0)) do |result, instant_entry|
       result[tank_role] += 1 if instant_entry.can_play?(tank_role)
       result[damage_role] += 1 if instant_entry.can_play?(damage_role)
       result[support_role] += 1 if instant_entry.can_play?(support_role)
