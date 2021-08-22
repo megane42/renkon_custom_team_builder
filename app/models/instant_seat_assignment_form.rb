@@ -27,14 +27,9 @@ class InstantSeatAssignmentForm
         end
       end
 
-      log_result
-
       return true if satisfy_must_pick
-
-      Rails.logger.info("constraint is not satisfied, try again...")
     end
 
-    Rails.logger.info("contraint is too strong and never satisfied.")
     game.destroy_seat_assignments
     false
   end
